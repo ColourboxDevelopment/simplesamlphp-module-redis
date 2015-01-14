@@ -1,2 +1,2 @@
 # simplesamlphp-module-redis
-Reids module for simpleSAMLphp
+Redis module for simpleSAMLphp
