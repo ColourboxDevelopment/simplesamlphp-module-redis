@@ -1,14 +1,15 @@
 {
-    "name": "simplesamlphp/simplesamlphp-module-redis",
+    "name": "colourbox/simplesamlphp-module-redis",
     "description": "A SimpleSAMLphp module for using Redis for session storage etc.",
     "type": "simplesamlphp-module",
-    "keywords": [ "redis", "store" ],
+    "keywords": ["redis", "store", "simpleSAMLphp"],
     "homepage": "https://github.com/ColourboxDevelopment/simplesamlphp-module-redis",
     "license": "MIT",
     "authors": [
         {
             "name": "Jacob Christiansen",
-            "email": "jacob@colourbox.com"
+            "email": "jacob@colourbox.com",
+            "role": "Developer"
         }
     ],
     "support": {
@@ -16,6 +17,7 @@
         "wiki": "https://github.com/ColourboxDevelopment/simplesamlphp-module-redis/wiki"
     },
     "require": {
+        "php": ">=5.4.0",
         "simplesamlphp/composer-module-installer": "~1.0",
         "predis/predis": "~1.0"
     }
