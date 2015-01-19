@@ -1,11 +1,24 @@
 <?php
+/**
+ * Redis store for simpleSAMLphp
+ *
+ * This store uses the Redis document store to store data from simpleSAMLphp.
+ * It implements the simpleSAMLphp datastore API, for easy integration with
+ * other parts of simpleSAMLphp.
+ *
+ * @author    Jacob Christiansen jacob@colourbox.com
+ * @copyright 2015 Colourbox ApS
+ * @license   http://opensource.org/licenses/MIT MIT-license
+ */
 class sspmod_redis_Store_Redis extends SimpleSAML_Store
 {
     protected function __construct()
     {
-        $config      = SimpleSAML_Configuration::getConfig('module_redis.php');
-        $host        = $config->getString('host', 'localhost');
-        $this->redis = new Predis\Client($host);
+        $redisConfig    = SimpleSAML_Configuration::getConfig('module_redis.php');
+        $globalConfig   = SimpleSAML_Configuration::getConfig();
+
+        $this->redis    = new Predis\Client($redisConfig->getString('host', 'localhost'));
+        $this->prefix   = $redisConfig->getString('prefix', 'simpleSAMLphp');
         $this->lifeTime = $globalConfig->getInteger('session.duration', 28800); // Default 8 hours
     }
 
@@ -18,7 +31,7 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
      */
     public function get($type, $key)
     {
-        $redisKey = "simpleSAMLphp.$type.$key";
+        $redisKey = "{$this->prefix}.$type.$key";
         $value = $this->redis->get($redisKey);
 
         return unserialize($value);
@@ -37,7 +50,7 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
      */
     public function set($type, $key, $value, $expire = null)
     {
-        $redisKey = "simpleSAMLphp.$type.$key";
+        $redisKey = "{$this->prefix}.$type.$key";
         $this->redis->set($redisKey, serialize($value));
 
         if (is_null($expire)) {
@@ -54,7 +67,7 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
      */
     public function delete($type, $key)
     {
-        $redisKey = "simpleSAMLphp.$type.$key";
+        $redisKey = "{$this->prefix}.$type.$key";
         $this->redis->del($redisKey);
     }
 }

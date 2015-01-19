@@ -1,4 +1,7 @@
 <?php
 $config = array (
-    'host' => 'tcp://localhost:6379'
+    // Redis server
+    'host' => 'tcp://localhost:6379',
+    // Key prefix
+    'prefix' => 'simplaSAMLphp'
 );
