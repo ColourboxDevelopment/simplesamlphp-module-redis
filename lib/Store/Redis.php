@@ -19,7 +19,7 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
 
         $this->redis    = new Predis\Client($redisConfig->getString('host', 'localhost'));
         $this->prefix   = $redisConfig->getString('prefix', 'simpleSAMLphp');
-        $this->lifeTime = $globalConfig->getInteger('session.duration', 28800); // Default 8 hours
+        $this->lifeTime = $redisConfig->getInteger('lifetime', 28800); // 8 hours
     }
 
     /**
