@@ -12,10 +12,13 @@
  */
 class sspmod_redis_Store_Redis extends SimpleSAML_Store
 {
-    protected function __construct()
+    private $redis;
+    private $prefix;
+    private $lifeTime;
+
+    public function __construct()
     {
         $redisConfig    = SimpleSAML_Configuration::getConfig('module_redis.php');
-        $globalConfig   = SimpleSAML_Configuration::getConfig();
 
         $this->redis    = new Predis\Client($redisConfig->getString('host', 'localhost'));
         $this->prefix   = $redisConfig->getString('prefix', 'simpleSAMLphp');
