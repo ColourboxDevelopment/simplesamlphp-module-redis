@@ -57,9 +57,9 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
         $this->redis->set($redisKey, serialize($value));
 
         if (is_null($expire)) {
-            $expire = $this->lifeTime;
+            $expire = time() + $this->lifeTime;
         }
-        $this->redis->expire($redisKey, $expire);
+        $this->redis->expireat($redisKey, $expire);
     }
 
     /**
