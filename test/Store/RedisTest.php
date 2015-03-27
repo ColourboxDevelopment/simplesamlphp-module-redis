@@ -126,7 +126,7 @@ namespace {
             $res = $store->get('test', 'nokey');
 
             $this->assertEquals('simpleSAMLphp.test.nokey', Predis\Client::$getKey);
-            $this->assertFalse($res);
+            $this->assertNull($res);
         }
 
         public function testDeleteKey()

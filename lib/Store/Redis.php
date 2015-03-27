@@ -37,6 +37,10 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
         $redisKey = "{$this->prefix}.$type.$key";
         $value = $this->redis->get($redisKey);
 
+        if (is_null($value)) {
+            return null;
+        }
+
         return unserialize($value);
     }
 
