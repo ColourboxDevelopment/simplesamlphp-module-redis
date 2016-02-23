@@ -10,6 +10,10 @@ namespace Predis {
         public static $expireValue = null;
         public static $deleteKey = null;
 
+        public function __construct($host)
+        {
+        }
+
         public function get($key)
         {
             self::$getKey   = $key;
@@ -48,20 +52,32 @@ namespace {
 
     class SimpleSAML_Configuration
     {
+        private static $hasHost;
+
         public static function getConfig()
         {
             return new SimpleSAML_Configuration;
         }
 
-        public function getString($value)
+        public static function setHasHost($boolean)
         {
-            if ($value == 'host') {
+            self::$hasHost = $boolean;
+        }
+
+        public function getString($key)
+        {
+            if (in_array($key, ["host", "old_host", "new_host"])) {
                 return 'localhost';
             }
-            if ($value == 'prefix') {
+            if ($key == 'prefix') {
                 return 'simpleSAMLphp';
             }
-            throw new ErrorException('Called with unexpected value');
+            throw new ErrorException('Called with unexpected key');
+        }
+
+        public function hasValue($key)
+        {
+            return self::$hasHost && $key == "host";
         }
 
         public function getInteger($key)
@@ -69,7 +85,7 @@ namespace {
             if ($key == 'lifetime') {
                 return 288000;
             }
-            throw new ErrorException('Called with unexpected value');
+            throw new ErrorException('Called with unexpected key');
         }
     }
 
@@ -85,8 +101,20 @@ namespace {
             Predis\Client::$deleteKey   = null;
         }
 
-        public function testSetKeyInRedis()
+        public function getHasHostValues()
         {
+            return [
+                [true],
+                [false]
+            ];
+        }
+
+        /**
+         * @dataProvider getHasHostValues
+         */
+        public function testSetKeyInRedis($hasHost)
+        {
+            SimpleSAML_Configuration::setHasHost($hasHost);
             $store = new sspmod_redis_Store_Redis();
             $store->set('test', 'key', ['one', 'two']);
 
@@ -100,8 +128,12 @@ namespace {
             //$this->assertEquals(1427739616, \Predis\Client::$expireValue);
         }
 
-        public function testSetKeyWithExpireInRedis()
+        /**
+         * @dataProvider getHasHostValues
+         */
+        public function testSetKeyWithExpireInRedis($hasHost)
         {
+            SimpleSAML_Configuration::setHasHost($hasHost);
             $store = new sspmod_redis_Store_Redis();
             $store->set('test', 'key', ['one', 'two'], 11);
 
@@ -111,8 +143,12 @@ namespace {
             $this->assertEquals(11, Predis\Client::$expireValue);
         }
 
-        public function testGetExistingKey()
+        /**
+         * @dataProvider getHasHostValues
+         */
+        public function testGetExistingKey($hasHost)
         {
+            SimpleSAML_Configuration::setHasHost($hasHost);
             $store = new sspmod_redis_Store_Redis();
             $res = $store->get('test', 'key');
 
@@ -120,8 +156,12 @@ namespace {
             $this->assertEquals(['ding' => 'bat'], $res);
         }
 
-        public function testGetNonExistingKey()
+        /**
+         * @dataProvider getHasHostValues
+         */
+        public function testGetNonExistingKey($hasHost)
         {
+            SimpleSAML_Configuration::setHasHost($hasHost);
             $store = new sspmod_redis_Store_Redis();
             $res = $store->get('test', 'nokey');
 
@@ -129,8 +169,12 @@ namespace {
             $this->assertNull($res);
         }
 
-        public function testDeleteKey()
+        /**
+         * @dataProvider getHasHostValues
+         */
+        public function testDeleteKey($hasHost)
         {
+            SimpleSAML_Configuration::setHasHost($hasHost);
             $store = new sspmod_redis_Store_Redis();
             $res = $store->delete('test', 'nokey');
 
