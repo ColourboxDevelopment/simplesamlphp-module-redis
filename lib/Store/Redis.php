@@ -20,7 +20,10 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
     {
         $redisConfig    = SimpleSAML_Configuration::getConfig('module_redis.php');
 
-        if ($redisConfig->hasValue('host')) {
+	if ($redisConfig->hasValue('cluster')) {
+	        $this->redis    = new Predis\Client($redisConfig->getArray('cluster', array()),
+		                                    array('cluster' => 'redis'));
+	} else if ($redisConfig->hasValue('host')) {
             $this->redis    = new Predis\Client($redisConfig->getString('host', 'localhost'));
         } else {
             $this->redis    = new sspmod_redis_Redis_DualRedis(
@@ -28,6 +31,7 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
                 new Predis\Client($redisConfig->getString('new_host'))
             );
         }
+
         $this->prefix   = $redisConfig->getString('prefix', 'simpleSAMLphp');
         $this->lifeTime = $redisConfig->getInteger('lifetime', 28800); // 8 hours
     }
