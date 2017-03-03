@@ -18,12 +18,12 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
 
     public function __construct()
     {
-        $redisConfig    = SimpleSAML_Configuration::getConfig('module_redis.php');
+        $redisConfig = SimpleSAML_Configuration::getConfig('module_redis.php');
 
         if ($redisConfig->hasValue('host')) {
-            $this->redis    = new Predis\Client($redisConfig->getString('host', 'localhost'));
+            $this->redis = new Predis\Client($redisConfig->getString('host', 'localhost'));
         } else {
-            $this->redis    = new sspmod_redis_Redis_DualRedis(
+            $this->redis = new sspmod_redis_Redis_DualRedis(
                 new Predis\Client($redisConfig->getString('old_host')),
                 new Predis\Client($redisConfig->getString('new_host'))
             );
