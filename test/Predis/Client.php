@@ -14,6 +14,7 @@ class Client
     public static $expireKey = null;
     public static $expireValue = null;
     public static $deleteKey = null;
+    public static $values = [];
 
     public function __construct($parameters = null, $options = null)
     {
@@ -21,28 +22,30 @@ class Client
 
     public function get($key)
     {
-        self::$getKey   = $key;
+        self::$getKey = $key;
 
-        if ($key == 'unittest.test.key') {
-            return serialize(['ding' => 'bat']);
+        if (isset(self::$values[$key])) {
+            return self::$values[$key];
         }
+
         return null;
     }
 
     public function set($key, $value)
     {
-        self::$setKey   = $key;
+        self::$setKey = $key;
         self::$setValue = $value;
+        self::$values[$key] = $value;
     }
 
     public function expireat($key, $expire)
     {
-        self::$expireKey   = $key;
+        self::$expireKey = $key;
         self::$expireValue = $expire;
     }
 
     public function del($key)
     {
-        self::$deleteKey   = $key;
+        self::$deleteKey = $key;
     }
 }
