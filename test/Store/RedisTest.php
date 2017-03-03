@@ -1,4 +1,5 @@
 <?php
+/* vim: set ts=4 sw=4 tw=0 et :*/
 
 namespace Predis {
     class Client
@@ -44,7 +45,6 @@ namespace Predis {
 }
 
 namespace {
-    use Nulpunkt\PhpStub\Stub;
 
     class RedisTest extends \PHPUnit_Framework_TestCase
     {
