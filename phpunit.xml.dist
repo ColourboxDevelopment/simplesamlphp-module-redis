@@ -12,7 +12,7 @@
          beStrictAboutTestSize="true"
          verbose="true">
   <testsuites>
-    <testsuite name="Colourbox CAS server module for simpleSAMLphp">
+    <testsuite name="Redis Store module for simpleSAMLphp">
       <directory suffix="Test.php">test/</directory>
     </testsuite>
   </testsuites>
