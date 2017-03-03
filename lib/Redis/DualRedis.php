@@ -1,4 +1,5 @@
 <?php
+/* vim: set ts=4 sw=4 tw=0 et :*/
 
 class sspmod_redis_Redis_DualRedis
 {
@@ -22,14 +23,6 @@ class sspmod_redis_Redis_DualRedis
         $this->newHost->set($key, $value);
     }
 
-    public function keys($pattern)
-    {
-        return array_unique(array_merge(
-            $this->newHost->keys($pattern),
-            $this->oldHost->keys($pattern)
-        ));
-    }
-
     public function del($key)
     {
         $this->newHost->del($key);
@@ -39,15 +32,5 @@ class sspmod_redis_Redis_DualRedis
     public function expireat($key, $timestamp)
     {
         $this->newHost->expireat($key, $timestamp);
-    }
-
-    public function expire($key, $delta)
-    {
-        $this->newHost->expire($key, $delta);
-    }
-
-    public function exists($key)
-    {
-        return $this->newHost->exists($key) || $this->oldHost->exists($key);
     }
 }
