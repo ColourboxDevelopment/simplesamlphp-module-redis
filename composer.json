@@ -35,7 +35,7 @@
         "mayflower/php-codebrowser": "~1.1",
         "simplesamlphp/simplesamlphp": "^1.14"
     },
-    "autoload-dev": {
+    "autoload": {
         "classmap": [
             "lib/"
         ]
