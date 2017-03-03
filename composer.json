@@ -17,7 +17,7 @@
         "wiki": "https://github.com/ColourboxDevelopment/simplesamlphp-module-redis/wiki"
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": "^5.4",
         "predis/predis": "~1.0",
         "simplesamlphp/composer-module-installer": "^1.1"
     },
