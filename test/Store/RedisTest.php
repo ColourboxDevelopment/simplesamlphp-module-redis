@@ -18,7 +18,7 @@ namespace Predis {
         {
             self::$getKey   = $key;
 
-            if ($key == 'simpleSAMLphp.test.key') {
+            if ($key == 'unittest.test.key') {
                 return serialize(['ding' => 'bat']);
             }
             return null;
@@ -46,45 +46,6 @@ namespace Predis {
 namespace {
     use Nulpunkt\PhpStub\Stub;
 
-    class SimpleSAML_Configuration
-    {
-        private static $hasHost;
-
-        public static function getConfig()
-        {
-            return new SimpleSAML_Configuration;
-        }
-
-        public static function setHasHost($boolean)
-        {
-            self::$hasHost = $boolean;
-        }
-
-        public function getString($key)
-        {
-            if (in_array($key, ["host", "old_host", "new_host"])) {
-                return 'localhost';
-            }
-            if ($key == 'prefix') {
-                return 'simpleSAMLphp';
-            }
-            throw new ErrorException('Called with unexpected key');
-        }
-
-        public function hasValue($key)
-        {
-            return self::$hasHost && $key == "host";
-        }
-
-        public function getInteger($key)
-        {
-            if ($key == 'lifetime') {
-                return 288000;
-            }
-            throw new ErrorException('Called with unexpected key');
-        }
-    }
-
     class RedisTest extends \PHPUnit_Framework_TestCase
     {
         public function setUp()
@@ -95,6 +56,8 @@ namespace {
             Predis\Client::$expireKey   = null;
             Predis\Client::$expireValue = null;
             Predis\Client::$deleteKey   = null;
+
+            SimpleSAML_Configuration::setConfigDir(__DIR__ . DIRECTORY_SEPARATOR . 'fixture');
         }
 
         public function getHasHostValues()
@@ -110,13 +73,12 @@ namespace {
          */
         public function testSetKeyInRedis($hasHost)
         {
-            SimpleSAML_Configuration::setHasHost($hasHost);
             $store = new sspmod_redis_Store_Redis();
             $store->set('test', 'key', ['one', 'two']);
 
-            $this->assertEquals('simpleSAMLphp.test.key', Predis\Client::$setKey);
+            $this->assertEquals('unittest.test.key', Predis\Client::$setKey);
             $this->assertEquals(serialize(['one', 'two']), Predis\Client::$setValue);
-            $this->assertEquals('simpleSAMLphp.test.key', Predis\Client::$expireKey);
+            $this->assertEquals('unittest.test.key', Predis\Client::$expireKey);
             /**
              * Cannot be tested, because time is used and code is not in
              * namespace, so the normal trick does not work.
@@ -129,13 +91,13 @@ namespace {
          */
         public function testSetKeyWithExpireInRedis($hasHost)
         {
-            SimpleSAML_Configuration::setHasHost($hasHost);
+            //SimpleSAML_Configuration::setHasHost($hasHost);
             $store = new sspmod_redis_Store_Redis();
             $store->set('test', 'key', ['one', 'two'], 11);
 
-            $this->assertEquals('simpleSAMLphp.test.key', Predis\Client::$setKey);
+            $this->assertEquals('unittest.test.key', Predis\Client::$setKey);
             $this->assertEquals(serialize(['one', 'two']), Predis\Client::$setValue);
-            $this->assertEquals('simpleSAMLphp.test.key', Predis\Client::$expireKey);
+            $this->assertEquals('unittest.test.key', Predis\Client::$expireKey);
             $this->assertEquals(11, Predis\Client::$expireValue);
         }
 
@@ -144,11 +106,11 @@ namespace {
          */
         public function testGetExistingKey($hasHost)
         {
-            SimpleSAML_Configuration::setHasHost($hasHost);
+            //SimpleSAML_Configuration::setHasHost($hasHost);
             $store = new sspmod_redis_Store_Redis();
             $res = $store->get('test', 'key');
 
-            $this->assertEquals('simpleSAMLphp.test.key', Predis\Client::$getKey);
+            $this->assertEquals('unittest.test.key', Predis\Client::$getKey);
             $this->assertEquals(['ding' => 'bat'], $res);
         }
 
@@ -157,11 +119,11 @@ namespace {
          */
         public function testGetNonExistingKey($hasHost)
         {
-            SimpleSAML_Configuration::setHasHost($hasHost);
+            //SimpleSAML_Configuration::setHasHost($hasHost);
             $store = new sspmod_redis_Store_Redis();
             $res = $store->get('test', 'nokey');
 
-            $this->assertEquals('simpleSAMLphp.test.nokey', Predis\Client::$getKey);
+            $this->assertEquals('unittest.test.nokey', Predis\Client::$getKey);
             $this->assertNull($res);
         }
 
@@ -170,11 +132,11 @@ namespace {
          */
         public function testDeleteKey($hasHost)
         {
-            SimpleSAML_Configuration::setHasHost($hasHost);
+            //SimpleSAML_Configuration::setHasHost($hasHost);
             $store = new sspmod_redis_Store_Redis();
             $res = $store->delete('test', 'nokey');
 
-            $this->assertEquals('simpleSAMLphp.test.nokey', Predis\Client::$deleteKey);
+            $this->assertEquals('unittest.test.nokey', Predis\Client::$deleteKey);
         }
     }
 }
