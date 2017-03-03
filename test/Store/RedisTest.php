@@ -46,10 +46,6 @@ namespace Predis {
 namespace {
     use Nulpunkt\PhpStub\Stub;
 
-    class SimpleSAML_Store
-    {
-    }
-
     class SimpleSAML_Configuration
     {
         private static $hasHost;
