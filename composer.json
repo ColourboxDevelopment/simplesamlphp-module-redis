@@ -32,7 +32,8 @@
         "sensiolabs/security-checker": "~2.0",
         "theseer/phpdox": "~0.7",
         "squizlabs/php_codesniffer": "~2.2",
-        "mayflower/php-codebrowser": "~1.1"
+        "mayflower/php-codebrowser": "~1.1",
+        "simplesamlphp/simplesamlphp": "^1.14"
     },
     "autoload-dev": {
         "classmap": [
