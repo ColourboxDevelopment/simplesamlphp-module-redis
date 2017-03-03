@@ -18,18 +18,19 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
 
     public function __construct()
     {
-        $redisConfig = SimpleSAML_Configuration::getConfig('module_redis.php');
+        $config = SimpleSAML_Configuration::getConfig('module_redis.php');
 
-        if ($redisConfig->hasValue('host')) {
-            $this->redis = new Predis\Client($redisConfig->getString('host', 'localhost'));
-        } else {
+        if ($config->hasValue('oldHost')) {
+            $oldHost = $config->getValue('oldHost');
             $this->redis = new sspmod_redis_Redis_DualRedis(
-                new Predis\Client($redisConfig->getString('old_host')),
-                new Predis\Client($redisConfig->getString('new_host'))
+                new Predis\Client($oldHost['parameters'], $oldHost['options']),
+                new Predis\Client($config->getValue('parameters'), $config->getValue('options'))
             );
+        } else {
+            $this->redis = new Predis\Client($config->getValue('parameters'), $config->getValue('options'));
         }
-        $this->prefix   = $redisConfig->getString('prefix', 'simpleSAMLphp_');
-        $this->lifeTime = $redisConfig->getInteger('lifetime', 28800); // 8 hours
+        $this->prefix = $config->getString('prefix', 'simpleSAMLphp');
+        $this->lifeTime = $config->getInteger('lifetime', 28800); // 8 hours
     }
 
     /**

@@ -1,27 +1,22 @@
 <?php
-/**
- * Configuration template for the Redis module for simpleSAMLphp
- */
 $config = [
     // Predis client parameters
-    'parameters' => 'tcp://localhost:6379',
+    'parameters' => ['key1' => 'value1'],
 
     // Predis client options
-    'options' => null,
+    'options' => ['okey1' => 'ovalue1'],
 
     // Old host
-    /*
     'oldHost' => [
         // Predis client parameters
-        'parameters' => 'tcp://localhost:6379',
+        'parameters' => ['key2' => 'value2'],
 
         // Predis client options
-        'options' => null,
+        'options' => ['okey2' => 'ovalue2'],
     ],
-     */
 
     // Key prefix
-    'prefix' => 'simpleSAMLphp',
+    'prefix' => 'unittest',
 
     // Lifitime for all non expiring keys
     'lifetime' => 288000

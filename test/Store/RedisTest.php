@@ -7,7 +7,26 @@ class RedisTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        \SimpleSAML_Configuration::setConfigDir(__DIR__ . DIRECTORY_SEPARATOR . 'fixture');
+        \SimpleSAML_Configuration::setConfigDir(__DIR__ . '/fixture/singlehost');
+    }
+
+    public function testDualRedisClientIsUsed()
+    {
+        \SimpleSAML_Configuration::setConfigDir(__DIR__ . '/fixture/oldhost');
+
+        $expectedConstructorParams = [
+            ['key2' => 'value2'],
+            ['key1' => 'value1']
+        ];
+        $expectedConstructorOptions= [
+            ['okey2' => 'ovalue2'],
+            ['okey1' => 'ovalue1']
+        ];
+
+        $store = new \sspmod_redis_Store_Redis();
+
+        $this->assertEquals($expectedConstructorParams, \Predis\Client::$parameters);
+        $this->assertEquals($expectedConstructorOptions, \Predis\Client::$options);
     }
 
     public function testSetKeyInRedis()

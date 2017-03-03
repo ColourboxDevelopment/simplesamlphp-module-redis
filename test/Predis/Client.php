@@ -8,6 +8,8 @@ namespace Predis;
  */
 class Client
 {
+    public static $parameters = [];
+    public static $options = [];
     public static $setKey = null;
     public static $setValue = null;
     public static $getKey = null;
@@ -18,6 +20,8 @@ class Client
 
     public function __construct($parameters = null, $options = null)
     {
+        self::$parameters[] = $parameters;
+        self::$options[] = $options;
     }
 
     public function get($key)
