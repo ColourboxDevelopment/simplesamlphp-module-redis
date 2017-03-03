@@ -38,5 +38,10 @@
         "classmap": [
             "lib/"
         ]
+    },
+    "autoload-dev": {
+        "classmap": [
+            "test/"
+        ]
     }
 }
