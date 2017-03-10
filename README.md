@@ -5,46 +5,82 @@ Redis module for simpleSAMLphp
 
 Introduction
 ------------
-
-The Redis module implements the simpleSAMLphp datastore API, so Redis can be
+The Redis module implements the simpleSAMLphp data store API, so Redis can be
 used for backend storage, i.e. session storage.
 
-Setup
------
+Prerequisites
+-------------
+This module requires the following
+* simpleSAMLphp
+* Redis server, See https://redis.io/ for more information
 
+Installation
+------------
 First thing to do is to set up your Redis server(s). This is out side the scope
 of this documentation.
 
-Next you must install this module either by obtaining the tarball or by
+Next you must install this module either by either obtaining the tarball or by
 installing it via composer. The latter is recommended
 
-    composer.phar require vendor/simplesamlphp-module-redis 1.*
+    composer.phar require colourbox/simplesamlphp-module-redis
 
-This will automatically install "predis/predis" as a dependency for ther
-module. If you downloaded the module yourself, remember to add predis/predis as
-a dependency in your composer.json.
+This will automatically install "predis/predis" as a dependency for ther module.
+If you downloaded the module yourself, remember to add predis/predis as a
+dependency in your composer.json.
 
 See https://github.com/simplesamlphp/composer-module-installer for more
-information on how to insatll simpleSAMLphp modules via composer.
+information on how to install simpleSAMLphp modules via composer.
 
 You can now enable the module by
 
     touch /var/simplesamlphp/modules/redis/enable
 
-and copy the config file
+Create `/var/simplesamlphp/config/module_redis.php` and set appropriate options
+for your Redis server. A configuration file template can be found in the
 
-    cp /var/simplesamlphp/modules/redis/config-templates/module_redis.php /var/simplesamlphp/config
-
-Edit the config file so it fits your setup. The following options can be configured:
-
-`host`
-:   The hostname used for your Redis server
-`prefix`
-:   Prefix of all keys saved in Redis. Default is 'simplasSALMphp'
-`lifetime`
-:   The maximum tiem a key is stored in Redis. Default is 8 hours
-
-You can now use redis a a valid simpleSAMLphp datastore. Use for session
-storage by setting the following in config.php
+Redis is used as session store for simpleSAMLphp by setting the following
+options in config.php
 
     'store.type' => 'redis:Redis'
+
+Rollover to new server
+----------------------
+The module has build in support for doing rolling update to a new Redis host.
+All writes are only done to the new host, but all reads will fall back to the old host if
+the value is not found on new host.
+
+### How-to
+* Start new Redis host
+* Add new host to config file (`parameters` and `options`) and add the old host to `oldHost` option
+* Wait until max session lifetime have expired
+* Remove `oldHost` config
+* Shut down old Redis host
+
+Configuration options
+---------------------
+* `parameters` Connection parameters for the underlying predis client. See
+https://github.com/nrk/predis/wiki/Connection-Parameters for details
+* `options` Client options for the underlying predis client. See
+https://github.com/nrk/predis/wiki/Client-Options for details.  // Key prefix
+* `prefix` Key prefix for all keys stored in Redis
+* `lifetime` Default lifetime for non-expiring keys in Redis
+* `oldHost` configuration for old Redis host when doing rollover
+  * `parameters` Connection parameters for the underlying predis client.
+  * `options` Client options for the underlying predis client.
+
+### Example
+```
+$config = [
+    // Predis client parameters
+    'parameters' => 'tcp://localhost:6379',
+
+    // Predis client options
+    'options' => null,
+
+    // Key prefix
+    'prefix' => 'simpleSAMLphp',
+
+    // Lifitime for all non expiring keys
+    'lifetime' => 288000
+];
+```
