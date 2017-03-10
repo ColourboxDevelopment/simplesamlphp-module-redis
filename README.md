@@ -11,7 +11,7 @@ used for backend storage, i.e. session storage.
 Prerequisites
 -------------
 This module requires the following
-* simpleSAMLphp
+* simpleSAMLphp v. 1.14.11 (Works with older version, but you should update)
 * Redis server, See https://redis.io/ for more information
 
 Installation
