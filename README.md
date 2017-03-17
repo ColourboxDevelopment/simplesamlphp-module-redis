@@ -82,3 +82,29 @@ the value is not found on new host.
 * Wait until max session lifetime have expired
 * Remove `oldHost` config
 * Shut down old Redis host
+
+### Configguration example
+```
+$config = [
+    // Predis client parameters
+    'parameters' => 'tcp://newhost:6379',
+
+    // Predis client options
+    'options' => null,
+
+    // Old host
+    'oldHost' => [
+        // Predis client parameters
+        'parameters' => 'tcp://oldhost:6379',
+
+        // Predis client options
+        'options' => null,
+    ],
+
+    // Key prefix
+    'prefix' => 'simpleSAMLphp',
+
+    // Lifitime for all non expiring keys
+    'lifetime' => 288000
+];
+```
