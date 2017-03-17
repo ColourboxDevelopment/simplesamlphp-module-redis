@@ -43,30 +43,16 @@ options in config.php
 
     'store.type' => 'redis:Redis'
 
-Rollover to new server
-----------------------
-The module has build in support for doing rolling update to a new Redis host.
-All writes are only done to the new host, but all reads will fall back to the old host if
-the value is not found on new host.
-
-### How-to
-* Start new Redis host
-* Add new host to config file (`parameters` and `options`) and add the old host to `oldHost` option
-* Wait until max session lifetime have expired
-* Remove `oldHost` config
-* Shut down old Redis host
-
 Configuration options
 ---------------------
-* `parameters` Connection parameters for the underlying predis client. See
-https://github.com/nrk/predis/wiki/Connection-Parameters for details
-* `options` Client options for the underlying predis client. See
-https://github.com/nrk/predis/wiki/Client-Options for details.  // Key prefix
+* `parameters` Connection parameters for the underlying predis client. See 
+[connection parameters](https://github.com/nrk/predis/wiki/Connection-Parameters) for details
+* `options` Client options for the underlying predis client. See [options](https://github.com/nrk/predis/wiki/Client-Options) for details
 * `prefix` Key prefix for all keys stored in Redis
 * `lifetime` Default lifetime for non-expiring keys in Redis
 * `oldHost` configuration for old Redis host when doing rollover
-  * `parameters` Connection parameters for the underlying predis client.
-  * `options` Client options for the underlying predis client.
+  * `parameters` Connection parameters for the underlying predis client
+  * `options` Client options for the underlying predis client
 
 ### Example
 ```
@@ -84,3 +70,15 @@ $config = [
     'lifetime' => 288000
 ];
 ```
+Rollover to new server
+----------------------
+The module has build in support for doing rolling update to a new Redis host.
+All writes are only done to the new host, but all reads will fall back to the old host if
+the value is not found on new host.
+
+### How-to
+* Start new Redis host
+* Add new host to config file (`parameters` and `options`) and add the old host to `oldHost` option
+* Wait until max session lifetime have expired
+* Remove `oldHost` config
+* Shut down old Redis host
