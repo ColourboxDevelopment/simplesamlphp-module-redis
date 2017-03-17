@@ -8,6 +8,8 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         \SimpleSAML_Configuration::setConfigDir(__DIR__ . '/fixture/singlehost');
+        \Predis\Client::$parameters = null;
+        \Predis\Client::$options = null;
     }
 
     public function testDualRedisClientIsUsed()
