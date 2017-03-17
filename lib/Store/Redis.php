@@ -23,11 +23,11 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
         if ($config->hasValue('oldHost')) {
             $oldHost = $config->getValue('oldHost');
             $this->redis = new sspmod_redis_Redis_DualRedis(
-                new Predis\Client($oldHost['parameters'], $oldHost['options']),
-                new Predis\Client($config->getValue('parameters'), $config->getValue('options'))
+                new \Predis\Client($oldHost['parameters'], $oldHost['options']),
+                new \Predis\Client($config->getValue('parameters'), $config->getValue('options'))
             );
         } else {
-            $this->redis = new Predis\Client($config->getValue('parameters'), $config->getValue('options'));
+            $this->redis = new \Predis\Client($config->getValue('parameters'), $config->getValue('options'));
         }
         $this->prefix = $config->getString('prefix', 'simpleSAMLphp');
         $this->lifeTime = $config->getInteger('lifetime', 28800); // 8 hours
