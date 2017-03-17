@@ -1,21 +1,14 @@
-Redis module for simpleSAMLphp
-==============================
-
-<!-- {{TOC}} -->
-
-Introduction
-------------
+# Redis module for simpleSAMLphp
+## Introduction
 The Redis module implements the simpleSAMLphp data store API, so Redis can be
 used for backend storage, i.e. session storage.
 
-Prerequisites
--------------
+## Prerequisites
 This module requires the following
 * simpleSAMLphp v. 1.14.11 (Works with older version, but you should update)
 * Redis server, See https://redis.io/ for more information
 
-Installation
-------------
+## Installation
 First thing to do is to set up your Redis server(s). This is out side the scope
 of this documentation.
 
@@ -43,8 +36,7 @@ options in config.php
 
     'store.type' => 'redis:Redis'
 
-Configuration options
----------------------
+## Configuration options
 * `parameters` Connection parameters for the underlying predis client. See 
 [connection parameters](https://github.com/nrk/predis/wiki/Connection-Parameters) for details
 * `options` Client options for the underlying predis client. See [options](https://github.com/nrk/predis/wiki/Client-Options) for details
@@ -70,8 +62,8 @@ $config = [
     'lifetime' => 288000
 ];
 ```
-Rollover to new server
-----------------------
+
+## Rollover to new server
 The module has build in support for doing rolling update to a new Redis host.
 All writes are only done to the new host, but all reads will fall back to the old host if
 the value is not found on new host.
@@ -83,7 +75,7 @@ the value is not found on new host.
 * Remove `oldHost` config
 * Shut down old Redis host
 
-### Configguration example
+### Configuration example
 ```
 $config = [
     // Predis client parameters
