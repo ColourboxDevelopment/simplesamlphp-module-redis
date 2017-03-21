@@ -18,24 +18,31 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
 
     public function __construct()
     {
-        $config = SimpleSAML_Configuration::getConfig('module_redis.php');
+        $redisConfig = SimpleSAML_Configuration::getConfig('module_redis.php');
 
-        if ($config->hasValue('oldHost')) {
-            $oldHost = $config->getValue('oldHost');
+        if ($redisConfig->hasValue('oldHost')) {
+            $oldHost = $redisConfig->getValue('oldHost');
             $this->redis = new sspmod_redis_Redis_DualRedis(
                 new Predis\Client($oldHost['parameters'], $oldHost['options']),
-                new Predis\Client($config->getValue('parameters'), $config->getValue('options'))
+                new Predis\Client($redisConfig->getValue('parameters'), $redisConfig->getValue('options'))
             );
         } else {
-            $this->redis = new Predis\Client($config->getValue('parameters'), $config->getValue('options'));
+            $this->redis = new Predis\Client($redisConfig->getValue('parameters'), $redisConfig->getValue('options'));
         }
-
+        
+        $this->auth();
+        
+        $this->prefix   = $redisConfig->getString('prefix', 'simpleSAMLphp');
+        $this->lifeTime = $redisConfig->getInteger('lifetime', 28800); // 8 hours
+    }
+    
+    protected function auth()
+    {
+        $redisConfig = SimpleSAML_Configuration::getConfig('module_redis.php');
         if($auth = $redisConfig->getString('auth', ''))
         {
             $this->redis->auth($auth);
         }
-        $this->prefix   = $redisConfig->getString('prefix', 'simpleSAMLphp');
-        $this->lifeTime = $redisConfig->getInteger('lifetime', 28800); // 8 hours
     }
 
     /**
@@ -71,12 +78,23 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
     public function set($type, $key, $value, $expire = null)
     {
         $redisKey = "{$this->prefix}.$type.$key";
-        $this->redis->set($redisKey, serialize($value));
-
-        if (is_null($expire)) {
+        if (is_null($expire))
+        {
             $expire = time() + $this->lifeTime;
         }
-        $this->redis->expireat($redisKey, $expire);
+        
+        try
+        {
+            $this->redis->set($redisKey, serialize($value));
+            $this->redis->expireat($redisKey, $expire);
+        }
+        catch(\ Exception $e)
+        {
+            //on shutdown sometime the auth is not set !
+            $this->auth();
+            $this->redis->set($redisKey, serialize($value));
+            $this->redis->expireat($redisKey, $expire);
+        }
     }
 
     /**
@@ -88,6 +106,15 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
     public function delete($type, $key)
     {
         $redisKey = "{$this->prefix}.$type.$key";
-        $this->redis->del($redisKey);
+        try
+        {
+            $this->redis->del($redisKey);
+        }
+        catch(\ Exception $e)
+        {
+            //on shutdown sometime the auth is not set !
+            $this->auth();
+            $this->redis->del($redisKey);
+        }
     }
 }
