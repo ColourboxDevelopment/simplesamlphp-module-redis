@@ -23,6 +23,20 @@ class sspmod_redis_Redis_DualRedis
         $this->newHost->set($key, $value);
     }
 
+    public function auth($key)
+    {
+        $this->newHost->auth($key);
+        $this->oldHost->auth($key);
+    }
+
+    public function keys($pattern)
+    {
+        return array_unique(array_merge(
+            $this->newHost->keys($pattern),
+            $this->oldHost->keys($pattern)
+        ));
+    }
+
     public function del($key)
     {
         $this->newHost->del($key);

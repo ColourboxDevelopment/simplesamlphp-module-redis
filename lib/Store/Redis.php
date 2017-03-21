@@ -29,8 +29,13 @@ class sspmod_redis_Store_Redis extends SimpleSAML_Store
         } else {
             $this->redis = new \Predis\Client($config->getValue('parameters'), $config->getValue('options'));
         }
-        $this->prefix = $config->getString('prefix', 'simpleSAMLphp');
-        $this->lifeTime = $config->getInteger('lifetime', 28800); // 8 hours
+
+        if($auth = $redisConfig->getString('auth', ''))
+        {
+            $this->redis->auth($auth);
+        }
+        $this->prefix   = $redisConfig->getString('prefix', 'simpleSAMLphp');
+        $this->lifeTime = $redisConfig->getInteger('lifetime', 28800); // 8 hours
     }
 
     /**
