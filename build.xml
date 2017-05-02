@@ -2,10 +2,10 @@
 
 <project name="Colourbox SSP cassrver module" default="build">
  <target name="build"
-   depends="prepare,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci,phpunit,phpcb,securitycheck,phpdox"/>
+   depends="prepare,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci,phpunit,phpcb,securitycheck"/>
 
  <target name="build-parallel"
-   depends="prepare,lint,tools-parallel,phpunit,phpcb,phpdox"/>
+   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
  <target name="tools-parallel" description="Run tools in parallel">
   <parallel threadCount="2">
@@ -28,7 +28,6 @@
   <delete dir="${basedir}/build/coverage"/>
   <delete dir="${basedir}/build/logs"/>
   <delete dir="${basedir}/build/pdepend"/>
-  <delete dir="${basedir}/build/phpdox"/>
   <delete dir="${basedir}/build/docs"/>
   <property name="clean.done" value="true"/>
  </target>
