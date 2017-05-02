@@ -201,12 +201,8 @@
   <exec executable="${basedir}/vendor/bin/security-checker" failonerror="true">
    <arg value="security:check" />
    <arg path="${basedir}/composer.lock" />
+   <arg value="--end-point" />
+   <arg value="http://security.sensiolabs.org/check_lock" />
   </exec>
- </target>
-
- <target name="phpdox"
-         depends="phpunit,phploc-ci,phpcs-ci,phpmd-ci"
-         description="Generate project documentation using phpDox">
-  <exec executable="${basedir}/vendor/bin/phpdox"/>
  </target>
 </project>
