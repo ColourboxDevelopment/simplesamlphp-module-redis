@@ -4,6 +4,7 @@ The Redis module implements the simpleSAMLphp data store API, so Redis can be
 used for backend storage, i.e. session storage.
 
 [![Build Status](https://travis-ci.org/ColourboxDevelopment/simplesamlphp-module-redis.svg?branch=master)](https://travis-ci.org/ColourboxDevelopment/simplesamlphp-module-redis)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FColourboxDevelopment%2Fsimplesamlphp-module-redis.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FColourboxDevelopment%2Fsimplesamlphp-module-redis?ref=badge_shield)
 
 ## Prerequisites
 This module requires the following
@@ -102,3 +103,7 @@ $config = [
     'lifetime' => 288000
 ];
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FColourboxDevelopment%2Fsimplesamlphp-module-redis.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FColourboxDevelopment%2Fsimplesamlphp-module-redis?ref=badge_large)
